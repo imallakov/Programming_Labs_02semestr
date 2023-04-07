@@ -12,7 +12,7 @@ void kramer() {
     int** A = nullptr;
     int* b = nullptr;
     int size = 0;
-    if (kramer_input(&A, &b, &size) == 0) {
+    if (equation_system_input(&A, &b, &size) == 0) {
         int det = determinant(A, size);
         //        std::cout << "Det = " << det << std::endl;
         if (det != 0) {
@@ -31,7 +31,7 @@ void kramer() {
     }
 }
 
-int kramer_input(int*** A, int** b, int* size) {
+int equaiton_system_input(int*** A, int** b, int* size) {
     int flag = 0;
     std::cout << "Please enter the size of matrix n = ";
     std::cin >> (*size);
