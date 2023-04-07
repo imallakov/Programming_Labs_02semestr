@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "kramer.h"
 #include "matrix.h"
 
 int main() {
@@ -13,7 +14,7 @@ int main() {
             // code
         }
         if (t == 3) {
-            // code
+            kramer();
         }
     } else {
         std::cout << "Error!";
