@@ -11,7 +11,7 @@ int main() {
             matrix_equation();
         }
         if (t == 2) {
-            // code
+            std::cout << "Coming soon!)";
         }
         if (t == 3) {
             kramer();
