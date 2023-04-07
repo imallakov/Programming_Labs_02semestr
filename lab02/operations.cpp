@@ -170,3 +170,14 @@ void check_answer(int** A, int** B, int** X, int size) {
     }
     if (flag == 0) std::cout << "ans*A=B\n";
 }
+
+int is_divisible(int** A, int num, int size) {
+    if (num < 0) num *= -1;
+    int flag = 1;
+    for (int i = 0; i < size && flag == 1; ++i) {
+        for (int j = 0; j < size && flag == 1; ++j) {
+            if ((A[i][j] % num) != 0) flag = 0;
+        }
+    }
+    return flag;
+}

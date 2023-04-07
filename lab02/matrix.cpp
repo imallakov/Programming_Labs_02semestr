@@ -1,5 +1,6 @@
 #include "matrix.h"
 
+#include <cmath>
 #include <iostream>
 
 #include "memory.h"
@@ -22,9 +23,13 @@ int** matrix_equation() {
                 int** adjoint_A = adjoint_matrix(A, n);
                 ans = multiply_matrices(B, adjoint_A, n);
                 double inv_num = 1.0 / det;
-                multiply_number_to_matrix(inv_num, ans, n);
+                if (is_divisible(ans, det, n) == 1) {
+                    multiply_number_to_matrix(inv_num, ans, n);
+                } else {
+                    std::cout << "1/det = " << 1 << "/" << det << "\n---------------------\n";
+                }
                 output(ans, n);
-                check_answer(A, B, ans, n);
+                //                check_answer(A, B, ans, n);
             } else {
                 std::cout << "No solution!";
             }
@@ -34,9 +39,13 @@ int** matrix_equation() {
                 int** adjoint_A = adjoint_matrix(A, n);
                 ans = multiply_matrices(adjoint_A, B, n);
                 double inv_num = 1.0 / det;
-                multiply_number_to_matrix(inv_num, ans, n);
+                if (is_divisible(ans, det, n) == 1) {
+                    multiply_number_to_matrix(inv_num, ans, n);
+                } else {
+                    std::cout << "1/det = " << 1 << "/" << det << "\n---------------------\n";
+                }
                 output(ans, n);
-                check_answer(A, B, ans, n);
+                //                check_answer(A, B, ans, n);
             } else {
                 std::cout << "No solution!";
             }
