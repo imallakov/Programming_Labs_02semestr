@@ -1,27 +1,9 @@
 #include "matrix.h"
 
-#include <cmath>
-#include <cstdlib>
 #include <iostream>
 
-int main() {
-    int t = 0, flag;
-    flag = menu(&t);
-    if (flag == 0) {
-        if (t == 1) {
-            matrix_equation();
-        }
-        if (t == 2) {
-            // code
-        }
-        if (t == 3) {
-            // code
-        }
-    } else {
-        std::cout << "Error!";
-    }
-    return 0;
-}
+#include "memory.h"
+#include "operations.h"
 
 int** matrix_equation() {
     int type = 1;
@@ -31,10 +13,34 @@ int** matrix_equation() {
     int n = 0;
     int** A = nullptr;
     int** B = nullptr;
-    if (matrix_equation_input(&A, &B, &n) == 0) {
-        //        output(A, n);
-        std::cout << determinant(A, n) << std::endl;
-        std::cout << determinant(B, n) << std::endl;
+    if (matrix_equation_input(&A, &B, &n) == 0 && n > 0) {
+        int** ans;
+        std::cout << "----------------------------\n";
+        if (type == 1) {
+            int det = determinant(A, n);
+            if (det != 0) {
+                int** adjoint_A = adjoint_matrix(A, n);
+                ans = multiply_matrices(B, adjoint_A, n);
+                double inv_num = 1.0 / det;
+                multiply_number_to_matrix(inv_num, ans, n);
+                output(ans, n);
+                check_answer(A, B, ans, n);
+            } else {
+                std::cout << "No solution!";
+            }
+        } else {
+            int det = determinant(A, n);
+            if (det != 0) {
+                int** adjoint_A = adjoint_matrix(A, n);
+                ans = multiply_matrices(adjoint_A, B, n);
+                double inv_num = 1.0 / det;
+                multiply_number_to_matrix(inv_num, ans, n);
+                output(ans, n);
+                check_answer(A, B, ans, n);
+            } else {
+                std::cout << "No solution!";
+            }
+        }
     } else {
         std::cout << "Error!";
     }
@@ -68,30 +74,6 @@ int matrix_equation_input(int*** A, int*** B, int* n) {
         }
     }
     return flag;
-}
-
-void free_memory(int** data, int size) {
-    for (int i = 0; i < size; ++i) {
-        if (data[i] != nullptr) free(data[i]);
-        data[i] = nullptr;
-    }
-    free(data);
-}
-
-int** allocate_matrix_memory(int size) {
-    int** data = (int**)calloc(size, sizeof(int*));
-    if (data != nullptr) {
-        int flag = 0;
-        for (int i = 0; i < size && flag == 0; ++i) {
-            data[i] = (int*)calloc(size, sizeof(int));
-            if (!data[i]) flag = 1;
-        }
-        if (flag == 1) {
-            free_memory(data, size);
-            data = nullptr;
-        }
-    }
-    return data;
 }
 
 int input(int** data, int size) {
@@ -129,35 +111,4 @@ int menu(int* t) {
         }
     }
     return flag;
-}
-
-int determinant(int** data, int size) {
-    if (size == 2) {
-        return (data[0][0] * data[1][1]) - (data[0][1] * data[1][0]);
-    }
-    int sum = 0;
-    int** temp = allocate_matrix_memory(size - 1);
-    if (temp != nullptr) {
-        //        std::cout << "Memory for temporary matrix is allocated succesfully!\n";
-        for (int i = 0; i < size; ++i) {
-            int x = 0, y = 0, y1 = 0;
-            while (x < size - 1 && y < size - 1) {
-                if (y1 == i) ++y1;
-                temp[x][y] = data[x + 1][y1];
-                ++y1;
-                ++y;
-                if (y == size - 1) {
-                    y1 = 0;
-                    y = 0;
-                    x++;
-                }
-            }
-            int minor = (int)pow(-1, 0 + i) * data[0][i] * determinant(temp, size - 1);
-            //            output(temp, size - 1);
-            //            std::cout << (int)pow(-1, 0 + i) << "   " << minor << std::endl;
-            sum += minor;
-        }
-        free_memory(temp, size - 1);
-    }
-    return sum;
 }
