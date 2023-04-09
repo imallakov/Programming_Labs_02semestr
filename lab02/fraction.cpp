@@ -1,6 +1,5 @@
 #include "fraction.h"
 
-#include <iomanip>
 #include <iostream>
 
 #include "memory.h"

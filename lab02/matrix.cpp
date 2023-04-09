@@ -1,6 +1,5 @@
 #include "matrix.h"
 
-#include <cmath>
 #include <iostream>
 
 #include "fraction.h"
