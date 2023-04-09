@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "gauss.h"
 #include "kramer.h"
 #include "matrix.h"
 
@@ -11,7 +12,7 @@ int main() {
             matrix_equation();
         }
         if (t == 2) {
-            std::cout << "Coming soon!)";
+            gauss();
         }
         if (t == 3) {
             kramer();

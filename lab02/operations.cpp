@@ -3,7 +3,6 @@
 #include <cmath>
 #include <iostream>
 
-#include "matrix.h"
 #include "memory.h"
 
 int** multiply_matrices(int** A, int** B, int size) {
@@ -151,33 +150,16 @@ int** remove_row_column(int** A, int x, int y, int size) {
     return result;
 }
 
-void check_answer(int** A, int** B, int** X, int size) {
-    int** ans = multiply_matrices(A, X, size);
-    int flag = 0;
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
-            if (ans[i][j] != B[i][j]) flag = 1;
+int great_common_divisor(int first_number, int second_number) {
+    int gcd = 1;
+    int num = 2;
+    first_number = abs(first_number);
+    second_number = abs(second_number);
+    while (num <= std::min(first_number, second_number)) {
+        if (first_number % num == 0 && second_number % num == 0) {
+            gcd = num;
         }
+        num++;
     }
-    if (flag == 0) std::cout << "A*ans=B\n";
-
-    ans = multiply_matrices(X, A, size);
-    flag = 0;
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
-            if (ans[i][j] != B[i][j]) flag = 1;
-        }
-    }
-    if (flag == 0) std::cout << "ans*A=B\n";
-}
-
-int is_divisible(int** A, int num, int size) {
-    if (num < 0) num *= -1;
-    int flag = 1;
-    for (int i = 0; i < size && flag == 1; ++i) {
-        for (int j = 0; j < size && flag == 1; ++j) {
-            if ((A[i][j] % num) != 0) flag = 0;
-        }
-    }
-    return flag;
+    return gcd;
 }

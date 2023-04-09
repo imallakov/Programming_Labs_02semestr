@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 
+#include "fraction.h"
 #include "memory.h"
 #include "operations.h"
 
@@ -22,14 +23,9 @@ int** matrix_equation() {
             if (det != 0) {
                 int** adjoint_A = adjoint_matrix(A, n);
                 ans = multiply_matrices(B, adjoint_A, n);
-                double inv_num = 1.0 / det;
-                if (is_divisible(ans, det, n) == 1) {
-                    multiply_number_to_matrix(inv_num, ans, n);
-                } else {
-                    std::cout << "1/det = " << 1 << "/" << det << "\n---------------------\n";
-                }
-                output(ans, n);
-                //                check_answer(A, B, ans, n);
+                struct fraction** final = matrix_to_struct(ans, n);
+                divide_fraction_by_int(final, n, n, det);
+                output_fraction(final, n, n);
             } else {
                 std::cout << "No solution!";
             }
@@ -38,14 +34,9 @@ int** matrix_equation() {
             if (det != 0) {
                 int** adjoint_A = adjoint_matrix(A, n);
                 ans = multiply_matrices(adjoint_A, B, n);
-                double inv_num = 1.0 / det;
-                if (is_divisible(ans, det, n) == 1) {
-                    multiply_number_to_matrix(inv_num, ans, n);
-                } else {
-                    std::cout << "1/det = " << 1 << "/" << det << "\n---------------------\n";
-                }
-                output(ans, n);
-                //                check_answer(A, B, ans, n);
+                struct fraction** final = matrix_to_struct(ans, n);
+                divide_fraction_by_int(final, n, n, det);
+                output_fraction(final, n, n);
             } else {
                 std::cout << "No solution!";
             }
@@ -71,7 +62,6 @@ int matrix_equation_input(int*** A, int*** B, int* n) {
         if (*A != nullptr && *B != nullptr) {
             std::cout << "Enter the matrix A :\n";
             if (input(*A, *n) == 0) {
-                //                std::cout << "Enter the matrix B :\n";
                 if (!(std::cout << "Enter the matrix B :\n") || input(*B, *n) != 0) {
                     flag = 1;
                 }

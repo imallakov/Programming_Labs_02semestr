@@ -16,14 +16,16 @@ void kramer() {
         int det = determinant(A, size);
         //        std::cout << "Det = " << det << std::endl;
         if (det != 0) {
+            std::cout << "-------------------------\n";
             for (int i = 0; i < size; ++i) {
                 int** temp = copy_for_kramer(A, b, i, size);
                 int temp_det = determinant(temp, size);
-                //                std::cout << "-------matrix" << i << "-------\n";
-                //                output(temp, size);
-                //                std::cout << "det" << i + 1 << " = " << temp_det << std::endl;
                 double x = (double)temp_det / (double)det;
-                std::cout << "x" << i + 1 << " = " << x << std::endl;
+                std::cout << "x" << i + 1 << " = ";
+                if (x != 0)
+                    std::cout << x << std::endl;
+                else
+                    std::cout << "error!" << std::endl;
             }
         } else {
             std::cout << "Either the system has no solution or it has an infinite number of solutions!\n";
@@ -31,7 +33,7 @@ void kramer() {
     }
 }
 
-int equaiton_system_input(int*** A, int** b, int* size) {
+int equation_system_input(int*** A, int** b, int* size) {
     int flag = 0;
     std::cout << "Please enter the size of matrix n = ";
     std::cin >> (*size);
