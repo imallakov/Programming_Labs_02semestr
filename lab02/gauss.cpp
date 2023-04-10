@@ -4,6 +4,7 @@
 
 #include "fraction.h"
 #include "kramer.h"
+#include "memory.h"
 
 void gauss() {
     int** A = nullptr;
@@ -21,7 +22,7 @@ void gauss() {
             //            std::cout << "--------------- i = " << i << " --------------\n";
             if (matrix[i][i].numerator != 1 || matrix[i][i].denominator != 1) {
                 //                std::cout << "Making first element equal to one!\n";
-                make_first_element_one(matrix, size, size + 1, i);
+                make_first_element_one(matrix, size + 1, i);
                 //                output_fraction(matrix, size, size + 1);
             }
             //            std::cout << "Operating the next rows!\n";
@@ -32,24 +33,27 @@ void gauss() {
         std::cout << "--------OPERATING BACKWARD!---------\n";
         for (int i = size - 1; i > 0; --i) {
             //            std::cout << "Operating the next rows!\n";
-            backward_operate_previous_rows(matrix, size, size + 1, i);
+            backward_operate_previous_rows(matrix, size + 1, i);
             //            output_fraction(matrix, size, size + 1);
         }
         output_fraction(matrix, size, size + 1);
         std::cout << "----------FINAL SOLUTION!-----------\n";
         output_in_normal_view(matrix, size, size + 1);
+        free_fraction_memory(matrix, size);
     } else {
         std::cout << "Error!";
     }
+    free_memory(A, size);
+    free(b);
 }
 
 void gauss_elimination(struct fraction** matrix, int row, int column) {
     for (int i = 0; i < row - 1; ++i) {
-        make_first_element_one(matrix, row, column, i);
+        make_first_element_one(matrix, column, i);
     }
 }
 
-void make_first_element_one(struct fraction** matrix, int row, int column, int current_row) {
+void make_first_element_one(struct fraction** matrix, int column, int current_row) {
     struct fraction temp = matrix[current_row][current_row];
     for (int i = 0; i < column; ++i) {
         matrix[current_row][i] = divide_fraction_by_fraction(matrix[current_row][i], temp);
@@ -64,11 +68,11 @@ void row_with_min_element_on_top(struct fraction** matrix, int row, int column) 
         }
     }
     if (min_ind != 0) {
-        row_to_top(matrix, row, column, min_ind);
+        row_to_top(matrix, column, min_ind);
     }
 }
 
-void row_to_top(struct fraction** matrix, int row, int column, int current_row) {
+void row_to_top(struct fraction** matrix, int column, int current_row) {
     while (current_row > 0) {
         for (int i = 0; i < column; ++i) {
             struct fraction temp = matrix[current_row - 1][i];
@@ -87,12 +91,12 @@ void operate_next_rows(struct fraction** matrix, int row, int column, int curren
             matrix[i][j] = subtract_fraction_from_fraction(matrix[i][j], temp);
         }
         if (matrix[i][i].numerator != 1 || matrix[i][i].denominator != 1) {
-            make_first_element_one(matrix, row, column, i);
+            make_first_element_one(matrix, column, i);
         }
     }
 }
 
-void backward_operate_previous_rows(struct fraction** matrix, int row, int column, int current_row) {
+void backward_operate_previous_rows(struct fraction** matrix, int column, int current_row) {
     for (int i = current_row - 1; i >= 0; --i) {
         struct fraction multiple = matrix[i][current_row];
         for (int j = 0; j < column; ++j) {
@@ -100,7 +104,7 @@ void backward_operate_previous_rows(struct fraction** matrix, int row, int colum
             matrix[i][j] = subtract_fraction_from_fraction(matrix[i][j], temp);
         }
         if (matrix[i][i].numerator != 1 || matrix[i][i].denominator != 1) {
-            make_first_element_one(matrix, row, column, i);
+            make_first_element_one(matrix, column, i);
         }
     }
 }

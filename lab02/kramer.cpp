@@ -31,6 +31,8 @@ void kramer() {
             std::cout << "Either the system has no solution or it has an infinite number of solutions!\n";
         }
     }
+    free_memory(A, size);
+    free(b);
 }
 
 int equation_system_input(int*** A, int** b, int* size) {

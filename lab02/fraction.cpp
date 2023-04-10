@@ -138,10 +138,7 @@ void output_in_normal_view(struct fraction** matrix, int row, int column) {
         for (int j = i; j < column; ++j) {
             if ((abs(matrix[i][j].numerator) != 1 || abs(matrix[i][j].denominator) != 1) &&
                 matrix[i][j].numerator != 0) {
-                if (((matrix[i][j].numerator > 0 && j == column - 1) ||
-                     (matrix[i][j].numerator < 0 && j < column - 1)) &&
-                    flag == 1)
-                    std::cout << "+ ";
+                if (flag == 1) std::cout << "+ ";
                 if (matrix[i][j].denominator != 1) std::cout << "(";
                 if (j > i && j < column - 1) {
                     print_fraction(multiply_fraction_to_fraction({-1, 1}, matrix[i][j]));
