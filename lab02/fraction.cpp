@@ -136,8 +136,9 @@ void output_in_normal_view(struct fraction** matrix, int row, int column) {
     for (int i = 0; i < row; ++i) {
         int flag = 0;
         for (int j = i; j < column; ++j) {
-            if ((abs(matrix[i][j].numerator) != 1 || abs(matrix[i][j].denominator) != 1) &&
-                matrix[i][j].numerator != 0) {
+            if ((matrix[i][i].numerator != 0 && j == column - 1) ||
+                ((abs(matrix[i][j].numerator) != 1 || abs(matrix[i][j].denominator) != 1) &&
+                 matrix[i][j].numerator != 0)) {
                 if (flag == 1) std::cout << "+ ";
                 if (matrix[i][j].denominator != 1) std::cout << "(";
                 if (j > i && j < column - 1) {
