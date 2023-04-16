@@ -4,7 +4,8 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-
+#define EPS (1e-7)
+#define N 7
 using namespace std;
 
 struct otrez {
@@ -13,8 +14,15 @@ struct otrez {
 };
 
 double func(double x) {
-    double ans = 7 * cos(x / 7) - (7 / x);
+    double ans = N * cos(x / N) - (N / x);
     return ans;
+    //    return x * x * x * x - 16 * x - 64;
+}
+
+double proiz_func(double x) {
+    double ans = (-1 * sin(x / N)) + (N / (x * x));
+    return ans;
+    //    return 4 * x * x * x - 16;
 }
 
 vector<otrez> otr(double a, double b, double h) {
@@ -36,12 +44,61 @@ vector<otrez> otr(double a, double b, double h) {
     return v;
 }
 
-void hord_method(double a, double b) {
+double get_start_node(double a, double b) {
+    double ans = 0;
+    int flag = 0;
+    for (int i = (int)a + 1; i <= (int)b && flag == 0; ++i) {
+        if (func(i) * func(i - 1) < 0) {
+            ans = (double)i;
+            flag = 1;
+        }
+    }
+    return ans;
+}
+
+void nyuton(double a, double b, double m) {
+    double prev, x = get_start_node(a, b);
+    cout << "Start point = " << x << endl;
+    do {
+        prev = x;
+        x = prev - (func(prev) / proiz_func(prev));
+        cout << "x_n+1 = " << x << "    x_n = " << prev << "     f = " << abs(abs(x) - abs(prev)) << endl;
+    } while (abs(abs(x) - abs(prev)) > EPS);
+    cout << "Koren nayden : x=" << x << endl;
+}
+
+void pol_del(double a, double b, double m) {
+    int iter = 0;
+    double left = a, right = b, f, x;
+    do {
+        x = (left + right) / 2;
+        f = func(x);
+        if (f * func(left) < 0)
+            right = x;
+        else
+            left = x;
+        iter++;
+    } while (fabs(f) > EPS && iter < 20000);
+    if (fabs(f) < EPS)
+        cout << "Koren nayden:  x = " << x << endl;
+    else {
+        cout << "Koordinaty otrezka: [ " << left << " ; " << right << " ]\n";
+    }
+}
+
+void hord_method(double a, double b, double m) {
+    double h = (double)(b - a) / m;
+
     double c = a - (func(a) / (func(b) - func(a))) * (b - a);
-    if (func(c) == 0) {
-        cout << "Koren nayden : " << c << endl;
+    if (abs(func(c)) <= EPS) {
+        cout << "Koren nayden:  x = " << c << endl;
     } else {
-        cout << "koren ne nayden!" << endl;
+        for (double i = a + h; i <= b; i += h) {
+            if (func(a) * func(b) < 0) {
+                cout << "Koordinaty otrezka: [ " << i << " ; " << i - h << " ]\n";
+                break;
+            }
+        }
     }
 }
 
@@ -65,8 +122,15 @@ int main() {
         cout << "Select one of the segments and enter its number: ";
         cin >> s;
     }
-    //    cout << "Selected segment is (" << v[s].left << " , " << v[s].right << ")\n";
-    for (int i = 0; i < (int)v.size(); ++i) hord_method(v[i].left, v[i].right);
+    cout << "Selected segment is (" << v[s].left << " , " << v[s].right << ")\n";
+    cout << "=======HORD METHOD=======\n";
+    hord_method(v[s].left, v[s].right, m);
+
+    cout << "=METHOD POLOVINNOGO DELENIYA=\n";
+    pol_del(v[s].left, v[s].right, m);
+
+    cout << "===METHOD NYUTONA===\n";
+    nyuton(v[s].left, v[s].right, m);
     return 0;
 }
 
