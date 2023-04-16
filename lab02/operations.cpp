@@ -82,9 +82,6 @@ int** transpose_matrix(int** A, int size) {
 int** adjoint_matrix(int** A, int size) {
     int** algebraic = matrix_minor(A, size);
     if (algebraic != NULL) {
-        //        std::cout << "Minor of Matrix : \n";
-        //        output(algebraic, size);
-        //        std::cout << "-------------------------------\n";
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
                 algebraic[i][j] = pow(-1, i + 1 + j + 1) * algebraic[i][j];
@@ -101,15 +98,9 @@ int** matrix_minor(int** A, int size) {
         int flag = 0;
         for (int i = 0; i < size && flag == 0; ++i) {
             for (int j = 0; j < size && flag == 0; ++j) {
-                //                std::cout << "Removed the row=" << i << " and the column=" << j <<
-                //                std::endl;
                 int** temp = remove_row_column(A, i, j, size);
                 if (temp != NULL) {
-                    //                    output(temp, size - 1);
                     int det = determinant(temp, size - 1);
-                    //                    std::cout << std::endl
-                    //                              << "Determinant=" << det << std::endl
-                    //                              << "---------------------------\n";
                     minor[i][j] = det;
                 } else {
                     flag = 1;
@@ -128,14 +119,11 @@ int** matrix_minor(int** A, int size) {
 int** remove_row_column(int** A, int x, int y, int size) {
     int** result = allocate_matrix_memory(size - 1);
     if (result != NULL) {
-        //        std::cout << "Removing row and column function: Memory allocated succesfully!\n";
         int x_0 = 0, y_0 = 0;
         for (int i = 0; i < size; ++i) {
             if (i != x) {
                 for (int j = 0; j < size; ++j) {
                     if (j != y) {
-                        //                    std::cout << x_0 << " " << y_0 << "  <---  " << i << " " << j <<
-                        //                    std::endl;
                         result[x_0][y_0] = A[i][j];
                         y_0++;
                         if (y_0 == size - 1) {
