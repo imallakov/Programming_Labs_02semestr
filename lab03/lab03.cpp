@@ -29,7 +29,7 @@ vector<otrez> otr(double a, double b, double h) {
     vector<otrez> v;
     double i = a;
     while (i <= b - h) {
-        if (abs(i) - 0 < 10e-4) i = 0;
+        //        if (abs(i) - 0 < 10e-4) i = 0;
         double left = i;
         double right = i + h;
         //        cout << left << " " << right << " " << h << endl;
@@ -94,8 +94,8 @@ void hord_method(double a, double b, double m) {
         cout << "Koren nayden:  x = " << c << endl;
     } else {
         for (double i = a + h; i <= b; i += h) {
-            if (func(a) * func(b) < 0) {
-                cout << "Koordinaty otrezka: [ " << i << " ; " << i - h << " ]\n";
+            if (func(i) * func(i - h) < 0) {
+                cout << "Koordinaty otrezka: [ " << i - h << " ; " << i << " ]\n";
                 break;
             }
         }
