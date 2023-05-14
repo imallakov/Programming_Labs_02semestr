@@ -27,10 +27,10 @@ void operate(string s) {
 }
 
 int main() {
-    string s = "";
+    string s;
     cin >> s;
     s += "+";
-    string ss = "";
+    string ss;
     for (int i = 0; i < (int)s.length(); ++i) {
         if (s[i] == '+' || s[i] == '-') {
             operate(ss);
