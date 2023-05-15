@@ -11,7 +11,7 @@ int main() {
     cout << "Enter the number of points and ways : ";
     cin >> n >> m;
     vector<pair<int, int>> adj[n + 1];
-    int distance[n + 1];
+    pair<int, int> distance[n + 1];
     int x = 1, y = 1;
     priority_queue<pair<int, int>> q;
     bool processed[n + 1];
@@ -28,8 +28,8 @@ int main() {
     cout << "Enter the end point : ";
     cin >> y;
 
-    for (int i = 1; i <= n; i++) distance[i] = INF;
-    distance[x] = 0;
+    for (int i = 1; i <= n; i++) distance[i] = {INF, INF};
+    distance[x] = {0, x};
     q.emplace(0, x);
     while (!q.empty()) {
         int a = q.top().second;
@@ -38,14 +38,22 @@ int main() {
             processed[a] = true;
             for (auto u : adj[a]) {
                 int b = u.first, w = u.second;
-                if (distance[a] + w < distance[b]) {
-                    distance[b] = distance[a] + w;
-                    q.emplace(-distance[b], b);
+                if (distance[a].first + w < distance[b].first) {
+                    distance[b].first = distance[a].first + w;
+                    distance[b].second = a;
+                    q.emplace(-distance[b].first, b);
                 }
             }
         }
     }
-    cout << "Shortes path from point " << x << " to point " << y << " is equal to " << distance[y];
+    cout << "Shortest path from point " << x << " to point " << y << " is equal to " << distance[y].first;
+    cout << "\nThe Shortest path is : ";
+    int k = y;
+    do {
+        cout << k << " <- ";
+        k = distance[k].second;
+    } while (k != x);
+    cout << k << endl;
 }
 
 /*
